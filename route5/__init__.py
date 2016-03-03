@@ -58,5 +58,6 @@ google = oauth.remote_app('google',
                           consumer_key=GOOGLE_CLIENT_ID,
                           consumer_secret=GOOGLE_CLIENT_SECRET)
 
-import views
+import views.code5
+import views.login
 import filters

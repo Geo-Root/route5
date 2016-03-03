@@ -73,7 +73,7 @@ def get_context():
 	context = {}
 	return context
 
-	
+
 ### Main controllers
 # @permission_required(resource='all', action='view')
 def index():
@@ -84,7 +84,7 @@ def index():
 
 
 app.add_url_rule('/login', 'login', login, methods=['GET', 'POST'])
-app.add_url_rule('/logout', 'logout', logout)
+app.add_url_rule('/logout', 'logout', logout, methods=['GET', 'POST'])
 app.add_url_rule('/authorized', 'authorized', authorized)
-app.add_url_rule('/', 'index', index)
+app.add_url_rule('/', 'index', index, methods=['GET'])
 

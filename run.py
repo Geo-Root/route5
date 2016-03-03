@@ -10,7 +10,7 @@ Wrapper for local server running.
 '''
 import sys
 import os
-from route5.settings import TEST_SERVER_PORT, WORKING_DIR
+from route5.settings import TEST_SERVER_PORT, WORKING_DIR, DEV_WORKING_DIR
 import yaml
 
 def load_settings(file_name):
@@ -22,8 +22,15 @@ file_name = os.path.join("instance/settings.yaml")
 settings = load_settings(file_name)
 
 current_dir = WORKING_DIR #os.path.dirname(os.path.realpath(__file__))
+if not os.path.isdir(WORKING_DIR):
+	current_dir = DEV_WORKING_DIR
+	if not os.path.isdir(DEV_WORKING_DIR):
+		print("Wrong working dir: %s" % WORKING_DIR)
+		sys.exit(2)
 parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 sys.path.append(parent_dir)
+
+print parent_dir
 
 from route5 import app
 
