@@ -18,4 +18,4 @@ TEST_SERVER_PORT = 3015
 GOOGLE_CLIENT_ID = '0f3c4dbad952b9ad6b913829b72ec5cc017a29da'
 GOOGLE_CLIENT_SECRET = ''
 DEV_WORKING_DIR = "/Users/akomissarov/Dropbox/developer/route5"
-WORKING_DIR = "/home/alex/route5/route5"
+WORKING_DIR = "/home/alex/route5"
