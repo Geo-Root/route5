@@ -6,85 +6,173 @@
 #@contact: alex.ferechin@gmail.com
 
 from flaskext.auth import permission_required
-from flask import render_template, url_for, redirect, g, Response
-from route5 import auth, google
+from flask import render_template, url_for, redirect, g, Response, request, flash, session
+from route5 import auth
 from route5 import app, roles
+from route5.forms import *
+from route5.models import db_users
+from route5.views.code5 import get_next_code5
+from flask.ext.bcrypt import Bcrypt, generate_password_hash
 
+bcrypt = Bcrypt(app)
 
-@app.route('/login')
 def login():
-    callback=url_for('authorized', _external=True)
-    return google.authorize(callback=callback)
+    d = get_context()
+    form = LoginForm(request.form)
+    d["login_form"] = form
+    d["shipper_form"] = ShipperRegisterForm()
+    d["user_form"] = UserRegisterForm()
+    d["focus"] = "login"
+    if request.method == "POST" and form.validate():
+        key_field = form.user_username.data.lower()
+        obj = db_users.find_one({"_id":key_field})
+        if not obj:
+            email_field = form.user_username.data.lower()
+            obj = db_users.find_one({"user_email":email_field})
+            if not obj:
+                form.user_username.errors.append("No such user")
+                d["login_form"] = form
+                return render_template('signup.html', d=d)
 
-@app.route('/logout')
+        if not bcrypt.check_password_hash(obj["user_password"], form.user_password.data):
+            form.user_password.errors.append("Wrong password")
+            d["login_form"] = form
+            return render_template('signup.html', d=d)
+        else:
+            session["user"] = obj
+            flash("Welcome back %s" % obj["user_username"])
+            return redirect(url_for("index"))
+    return render_template("signup.html", d=d)
+    
+    # callback=url_for('authorized', _external=True)
+    # return google.authorize(callback=callback)
+
+
 def logout():
     session.clear()
-    return render_template("error.html", error="You can login back")
+    flash("You can login back")
+    return redirect(url_for("index"))
 
-@google.tokengetter
+
 def get_access_token():
     return session.get('access_token')
 
-@app.route('/authorized')
-@google.authorized_handler
-def authorized(resp):
-    ''' Controller for handling google auth response.
+
+def helper_signup(form, utype="user"):
+
+    status = None
+    # user = User(form=form) # TODO: not dict fix it
+    user = {
+        'user_username': form.user_username.data,
+        'user_password1': form.user_password1.data, # TODO: now raw, fix it
+        'user_email': form.user_email.data,
+        'user_name': form.user_name.data,
+        'user_lastname': form.user_lastname.data,
+        'user_mobile': form.user_mobile.data,
+        'user_language': form.user_language.data,
+        'user_code5': form.user_code5.data,
+        'user_promotion_code': form.user_promotion_code.data,
+    }
+    user["user_password"] = generate_password_hash(user["user_password1"], 12)
+    del user["user_password1"]
+
+    key_field = user['user_username'].lower()
+    obj = db_users.find_one({"_id":key_field})
+    if obj:
+        form.user_username.errors.append("User exists")
+        return False, form, None
+    user["_id"] = key_field
+    db_users.save(user)
+    return True, form, user
+
+def signup():
+    ''' Shipper signup page, currently generic.
     '''
-    if 'access_token' in resp:
-        access_token = resp['access_token']
-        session['access_token'] = access_token, ''
+    if "user" in session:
+        flash("Please logout")
+        return redirect(url_for("index"))
 
-        access_token = session.get('access_token')
-        if access_token is None:
-            return redirect("http://google.com") 
-            # return render_template("error.html", error="Empty access token")
+    d = get_context()
+    d["focus"] = "login"
+    code5, d["user_code5"] = get_next_code5()
+    d["login_form"] = LoginForm(request.form)
+    d["shipper_form"] = ShipperRegisterForm(request.form)
+    d["user_form"] = UserRegisterForm(request.form)
+    return render_template('signup.html', d=d)
 
-        access_token = access_token[0]
-        headers = {'Authorization': 'OAuth '+access_token}
-        req = Request('https://www.googleapis.com/oauth2/v1/userinfo',
-                      None, headers)
-        try:
-            res = urlopen(req)
-        except URLError, e:
-            if e.code == 401:
-                # Unauthorized - bad token
-                session.pop('access_token', None)
-                return redirect("http://google.com") 
-                # return render_template("error.html", error="Error 401 from Google Auth")
-            return redirect("http://google.com") 
-            # return render_template("error.html", error="Something wrong %s" % str(e))
-        data = res.read()
-        data = simplejson.loads(data)
-        username = data["email"]
+def signup_user():
+    ''' User signup page, currently generic.
+    '''
+    d = get_context()
+    form = UserRegisterForm(request.form)
+    d["user_form"] = form
 
-        if username in g.users:
-            if g.users[username].authenticate(username):
-                flash("Welcome %s" % username)
-                return redirect('/')
-        flash("Wrong login or password")
-        return redirect("http://google.com") 
-        # return render_template("error.html", error="Wrong inner user auth")
-    else:
-        return redirect("http://google.com") 
-        # return render_template("error.html", error="No access token in response %s" % str(resp))
+    d["login_form"] = LoginForm()
+    d["shipper_form"] = ShipperRegisterForm()
+    
+    d["focus"] = "user"
+    if request.method == "POST" and form.validate():
+        status, form, user = helper_signup(form, utype="user")
+        if not status:
+            d["from"] = form
+            return render_template('signup.html', d=d)
+        flash('Thanks for registering')
+        session["user"] = user
+        return redirect(url_for("index"))
+    if not "user_code5" in d:
+        code5, d["user_code5"] = get_next_code5()
+    return render_template('signup.html', d=d)
 
+def signup_shipper():
+    ''' Shipper signup page, currently generic.
+    '''
+    d = get_context()
+    form = ShipperRegisterForm(request.form)
+    d["shipper_form"] = form
+    d["focus"] = "shipper"
+
+    d["login_form"] = LoginForm()
+    d["user_form"] = UserRegisterForm()
+
+    if request.method == "POST" and form.validate():
+        status, form = helper_signup(form, utype="shipper")
+        if not status:
+            d["from"] = form
+            return render_template('signup.html', d=d)
+        flash('Thanks for registering')
+        return redirect(url_for("index"))
+    if not "user_code5" in d:
+        code5, d["user_code5"] = get_next_code5()
+    return render_template('signup.html', d=d)
+
+### Context related controllers and helpers
 
 def get_context():
-	context = {}
-	return context
-
+    context = {}
+    if "user" in session:
+        context["user"] = session["user"]
+    return context
 
 ### Main controllers
 # @permission_required(resource='all', action='view')
 def index():
     ''' Index page.
     '''
+    if not "user" in session:
+        return redirect(url_for("signup"))
     d = get_context()
     return render_template('index.html', d=d)
 
 
-app.add_url_rule('/login', 'login', login, methods=['GET', 'POST'])
-app.add_url_rule('/logout', 'logout', logout, methods=['GET', 'POST'])
-app.add_url_rule('/authorized', 'authorized', authorized)
 app.add_url_rule('/', 'index', index, methods=['GET'])
+app.add_url_rule('/signup', 'signup', signup, methods=['GET'])
+app.add_url_rule('/user-signup', 'signup_user', signup_user, methods=['POST'])
+app.add_url_rule('/shipper-signup', 'signup_shipper', signup_shipper, methods=['POST'])
+app.add_url_rule('/login', 'login', login, methods=['POST'])
+app.add_url_rule('/logout', 'logout', logout, methods=['GET', 'POST'])
+app.add_url_rule('/index', 'index', index, methods=['GET'])
+
+
+
+
 

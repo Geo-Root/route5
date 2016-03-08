@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block top_navigation %}
+<div class="empty-header">
+    <p><a href="/">Route5</a></p>
+</div>
+{% endblock %}
+
+{% block main %}
+
+<div class="row signup-path">
+  <div class="col-md-3 col-md-offset-3 signup-user"><a href="/shipper-signup">Sign up as Shipper</a></div>
+  <div class="col-md-3 col-md-offset-1 signup-shipper"><a href="/user-signup">Sign up as User</a></div>
+</div>
+<div class="row">
+ <div class="col-md-3 col-md-offset-5 signup-code5"><a href="/code5-signup">Sign up with code5</a></div>
+</div>
+
+{% endblock %}

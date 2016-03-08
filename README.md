@@ -1,6 +1,35 @@
 # route5
 Distributed Shipping and Address Generation Platform. Highly scalable design repository for cloud and mobile client implementations.
 
+## User auth system based on Flask-Auth module
+
+### Users:
+
+-- admin
+-- guest
+-- user
+-- shipper
+-- busines
+
+### Actions:
+
+- login
+-- with email address or mobile number
+-- with code5
+
+- registration
+-- as user
+-- as shipper
+-- by code5
+- email verification
+- pass stroring
+
+### Signup
+
+Miniaml requeried information and gentle force to fill all data in profile
+
+### Profile
+
 # Current implementation plan
 
 ## End user application for usual:

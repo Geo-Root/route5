@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block top_navigation %}
+<div class="empty-header">
+    <p>Route5</p>
+</div>
+{% endblock %}
+
+{% block main %}   
+<div class="signup-wrapper">
+    <section class="signup-top">
+        <div>
+            Sign up to ship:
+        </div>
+    </section>
+    <section class="signup-form">
+        <form id="signup-form" class="well" action="{{ url_for('signup_shipper') }}" method="post" accept-charset="utf-8" name="signup-form">
+            <fieldset>
+                
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_username.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_username() }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_username.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_username.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>                  
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_password1.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_password1() }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_password1.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_password1.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>  
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_password2.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_password2() }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_password2.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_password2.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_email.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_email() }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_email.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_email.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">Name:</div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_name(placeholder="First name") }}</div>
+                    <div class="col-md-2">{{ d.form.user_lastname(placeholder="Last name") }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_lastname.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_lastname.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_mobile.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_mobile(placeholder="+1 (111) 222-2222") }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_mobile.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_mobile.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_language.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_language() }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_language.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_language.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">Your code5:</div>
+                    <div class="col-md-2">{{ d.user_code5 }}</div>
+                </div>
+
+                <!-- <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_code5.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_code5() }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_code5.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_code5.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div> -->
+
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">{{ d.form.user_promotion_code.label }}</div>
+                    <div class="col-md-2">{{ d.form.user_promotion_code() }}</div>
+                </div>
+                <div>
+                    {% if d.form.user_promotion_code.errors %}
+                        <ul class="errors">
+                            {% for error in d.form.user_promotion_code.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                {{ d.form.csrf_token }}
+
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <input class="btn btn-primary" type="submit" value="Create account"/>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+    </section>
+</div>  
+
+{% endblock %}
