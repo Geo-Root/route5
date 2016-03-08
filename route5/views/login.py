@@ -13,6 +13,7 @@ from route5.forms import *
 from route5.models import db_users
 from route5.views.code5 import get_next_code5
 from flask.ext.bcrypt import Bcrypt, generate_password_hash
+import datetime
 
 bcrypt = Bcrypt(app)
 
@@ -70,8 +71,10 @@ def helper_signup(form, utype="user"):
         'user_lastname': form.user_lastname.data,
         'user_mobile': form.user_mobile.data,
         'user_language': form.user_language.data,
-        'user_code5': form.user_code5.data,
+        'user_code5': session["code5"],
         'user_promotion_code': form.user_promotion_code.data,
+        'user_registration_date': datetime.datetime.utcnow(),
+        'user_type': utype,
     }
     user["user_password"] = generate_password_hash(user["user_password1"], 12)
     del user["user_password1"]
@@ -94,7 +97,11 @@ def signup():
 
     d = get_context()
     d["focus"] = "login"
-    code5, d["user_code5"] = get_next_code5()
+    if not code5 in session:
+        code5, str_code5 = get_next_code5()
+        session["code5"] = code5
+        session["str_code5"] = str_code5
+    d["user_code5"] = session["str_code5"]
     d["login_form"] = LoginForm(request.form)
     d["shipper_form"] = ShipperRegisterForm(request.form)
     d["user_form"] = UserRegisterForm(request.form)
@@ -116,7 +123,7 @@ def signup_user():
         if not status:
             d["from"] = form
             return render_template('signup.html', d=d)
-        flash('Thanks for registering')
+        flash('Thank you for registering')
         session["user"] = user
         return redirect(url_for("index"))
     if not "user_code5" in d:
@@ -135,11 +142,12 @@ def signup_shipper():
     d["user_form"] = UserRegisterForm()
 
     if request.method == "POST" and form.validate():
-        status, form = helper_signup(form, utype="shipper")
+        status, form, user = helper_signup(form, utype="shipper")
         if not status:
             d["from"] = form
             return render_template('signup.html', d=d)
-        flash('Thanks for registering')
+        flash('Thank you for registering')
+        session["user"] = user
         return redirect(url_for("index"))
     if not "user_code5" in d:
         code5, d["user_code5"] = get_next_code5()
@@ -167,6 +175,7 @@ def index():
 app.add_url_rule('/', 'index', index, methods=['GET'])
 app.add_url_rule('/signup', 'signup', signup, methods=['GET'])
 app.add_url_rule('/user-signup', 'signup_user', signup_user, methods=['POST'])
+app.add_url_rule('/code5-signup', 'code5_user', signup_code5, methods=['POST'])
 app.add_url_rule('/shipper-signup', 'signup_shipper', signup_shipper, methods=['POST'])
 app.add_url_rule('/login', 'login', login, methods=['POST'])
 app.add_url_rule('/logout', 'logout', logout, methods=['GET', 'POST'])
