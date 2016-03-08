@@ -153,6 +153,9 @@ def signup_shipper():
         code5, d["user_code5"] = get_next_code5()
     return render_template('signup.html', d=d)
 
+def signup_code5():
+    pass
+
 ### Context related controllers and helpers
 
 def get_context():
@@ -175,7 +178,7 @@ def index():
 app.add_url_rule('/', 'index', index, methods=['GET'])
 app.add_url_rule('/signup', 'signup', signup, methods=['GET'])
 app.add_url_rule('/user-signup', 'signup_user', signup_user, methods=['POST'])
-app.add_url_rule('/code5-signup', 'code5_user', signup_code5, methods=['POST'])
+app.add_url_rule('/code5-signup', 'signup_code5', signup_code5, methods=['POST'])
 app.add_url_rule('/shipper-signup', 'signup_shipper', signup_shipper, methods=['POST'])
 app.add_url_rule('/login', 'login', login, methods=['POST'])
 app.add_url_rule('/logout', 'logout', logout, methods=['GET', 'POST'])
