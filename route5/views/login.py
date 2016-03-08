@@ -97,7 +97,7 @@ def signup():
 
     d = get_context()
     d["focus"] = "login"
-    if not code5 in session:
+    if not "code5" in session:
         code5, str_code5 = get_next_code5()
         session["code5"] = code5
         session["str_code5"] = str_code5
