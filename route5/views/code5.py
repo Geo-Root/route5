@@ -43,6 +43,12 @@ def get_next_code5():
     str_code5 = "%s-%s-%s-%s-%s" % (str_code5[:3], str_code5[3:6], str_code5[6:9], str_code5[9:12], str_code5[12:16])
     return code5, str_code5
 
+
+def get_str_code5(code5):
+    str_code5 = "0"*(15 - len(str(code5))) + str(code5)
+
+    return "%s-%s-%s-%s-%s" % (str_code5[:3], str_code5[3:6], str_code5[6:9], str_code5[9:12], str_code5[12:16])
+
 def check_code5():
     pass
 
