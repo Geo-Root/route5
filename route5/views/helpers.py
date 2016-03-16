@@ -11,7 +11,7 @@ from flask import session
 
 ### Context related helpers
 from route5.models import db_users
-from route5.views.code5 import get_str_code5
+from route5.views.code5 import get_str_code5, get_api_token
 
 
 def get_context():
@@ -24,4 +24,8 @@ def get_context():
         context["user"] = session["user"]
         context["str_code5"] = get_str_code5(session["user"]["user_code5"])
         session["code5"] = session["user"]["user_code5"]
+
+        if session["user"]["user_type"] == "business":
+            context["user"]["api_token"] = get_api_token(session["user"]["user_code5"])
+
     return context

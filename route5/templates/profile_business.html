@@ -1,10 +1,250 @@
 {% extends "base.html" %}
 
+{% block jsscript %}
+    <script type="application/javascript">
+        $(document).ready(function(){
+            $("#user_pic").mouseover(function () {
+                $("#change_image").show();
+            });
+            $("#user_pic").mouseleave(function () {
+                $("#change_image").fadeOut("slow");
+            });
+            refresh_profile_image();
+        });
 
-{% block main %}   
+        function refresh_profile_image() {
+            $.getJSON("/rpc/me/image", function(data) {
+                var d = new Date();
+                $("#user_pic").attr("src", data.responseText+"?"+d.getTime());
+                $("#user_pic_form").attr("src", data.responseText+"?"+d.getTime());
+            });
+        }
+
+    </script>
+{% endblock %}
 
 
-<div><br><br><br><br>
-	<h1>Welcome business {{d.user.user_username}}</h1>
-</div>
+{% block main %}
+
+<div class="row profile">
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Shipper profile</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 " align="center">
+                    {% if d.user.profile_image %}
+                        <img id="user_pic" alt="User Pic" src="{{ d.user.profile_image }}" class="img-circle img-responsive">
+                    {% else %}
+                        <img id="user_pic" alt="User Pic" src="http://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user-150x150.png" class="img-circle img-responsive">
+                    {% endif %}
+                    <span id="change_image" hidden><a data-toggle="modal" href="#imageModal">Click to change</a></span>
+                    <span>Your profile: 70%</span>
+                </div>
+                <div class=" col-md-9 col-lg-9 ">
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>Company name:</td>
+                        <td>{{ d.user.user_username }}</td>
+                      </tr>
+                      <tr>
+                        <td>Owner Full Name:</td>
+                        <td>{{ d.user.user_name }} {{ d.user.user_lastname }}</td>
+                      </tr>
+                      <tr>
+                        <td>Owner Email:</td>
+                        <td>{{ d.user.user_email }}</td>
+                      </tr>
+                      <tr>
+                        <td>Contact Phone Number:</td>
+                        <td>{{ d.user.user_mobile }}</td>
+                      </tr>
+                      <tr>
+                        <td>Code5</td>
+                        <td>{{ d.str_code5 }}</td>
+                      </tr>
+
+                      <tr>
+                        <td>API token</td>
+                        <td><p class="long_text">{{ d.user.api_token }}</p></td>
+                      </tr>
+                      <tr>
+                        <td>API Access Status</td>
+                        <td><p class="long_text">No access</p></td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+
+                    <a data-toggle="modal" href="#editModal" data-original-title="Edit" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning pull-right"><i class="glyphicon glyphicon-edit"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <!-- User image profile modal -->
+
+        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Please choose image file</h4>
+              </div>
+              <div class="modal-body">
+
+                  <div class="fileinput fileinput-new" data-provides="fileinput">
+                      <div class="fileinput-new thumbnail" style="width: 150px; height: 150px;">
+                        {% if d.user.profile_image %}
+                        <img id="user_pic_form" alt="User Pic" src="{{ d.user.profile_image }}" class="img-circle img-responsive">
+                    {% else %}
+                        <img id="user_pic_form" alt="User Pic" src="http://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user-150x150.png" class="img-circle img-responsive">
+                    {% endif %}
+                      </div>
+                      <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                      <div>
+                          <form method=POST enctype=multipart/form-data action="{{ url_for('upload_profile_photo') }}">
+                            <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="file"></span>
+                            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+
+                      </div>
+                  </div>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="save_image_form">Save changes</button>
+              </div>
+                </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div>
+
+
+
+        <!-- User edit profile modal -->
+
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Please edit and save your profile</h4>
+              </div>
+              <div class="modal-body">
+
+                  <form id="signup-form" action="{{ url_for('save_user_profile') }}" method="post" accept-charset="utf-8" name="signup-form">
+                    <fieldset>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3">Company name:</div>
+                            <div class="col-md-3">{{ d.user.user_username }}</div>
+                            <div class="col-md-2"><a href="#change_password">Change&nbsp;password</a></div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3">Email:</div>
+                            <div class="col-md-3">{{ d.user.user_email }}</div>
+                            <div class="col-md-2"><a href="#edit_email"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3">Owner Full Nam:</div>
+                            <div class="col-md-3">{{ d.form.user_name(placeholder="First name") }}</div>
+                            <div class="col-md-2">{{ d.form.user_lastname(placeholder="Last name") }}</div>
+                        </div>
+                        <div>
+                            {% if d.form.user_lastname.errors %}
+                                <ul class="errors">
+                                    {% for error in d.form.user_lastname.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3">{{ d.form.user_mobile.label }}</div>
+                            <div class="col-md-3">{{ d.form.user_mobile(placeholder="+1 (111) 222-2222") }}</div>
+                        </div>
+                        <div>
+                            {% if d.form.user_mobile.errors %}
+                                <ul class="errors">
+                                    {% for error in d.form.user_mobile.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3">{{ d.form.user_country.label }}</div>
+                            <div class="col-md-3">{{ d.form.user_country() }}</div>
+                        </div>
+                        <div>
+                            {% if d.form.user_country.errors %}
+                                <ul class="errors">
+                                    {% for error in d.form.user_country.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3">{{ d.form.user_language.label }}</div>
+                            <div class="col-md-3">{{ d.form.user_language() }}</div>
+                        </div>
+                        <div>
+                            {% if d.form.user_language.errors %}
+                                <ul class="errors">
+                                    {% for error in d.form.user_language.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3">Your code5:</div>
+                            <div class="col-md-4">{{ d.str_code5 }}</div>
+                            <div class="col-md-2"><a href="#manage_code5">See all&nbsp;<span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span></a></div>
+                        </div>
+
+                        {{ d.form.csrf_token }}
+
+
+                    </fieldset>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="save_image_form">Save changes</button>
+              </div>
+                </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div>
+
 {% endblock %}

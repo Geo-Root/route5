@@ -235,7 +235,6 @@ class LoginForm(Form):
 
 class UserForm(Form):
 
-    user_username = TextField(label="Username", validators=[validators.Required(), validators.Length(min=4, max=25)])
     user_name = TextField(label="First name", validators=[validators.optional()])
     user_lastname = TextField(label="Last name", validators=[validators.optional()])
     user_country = TextField(label="Country", validators=[validators.Optional()])
@@ -249,6 +248,7 @@ class UserForm(Form):
 class RegisterForm(UserForm):
 
     user_email = TextField(label="Email", validators=[validators.Required(), wtforms.validators.Email()])
+    user_username = TextField(label="Username", validators=[validators.Required(), validators.Length(min=4, max=25)])
     user_password1 = PasswordField(label="Password", validators=[validators.Required(), validators.Length(min=3)])
     user_password2 = PasswordField(label="Repeat password", validators=[validators.Required(),  validators.EqualTo('user_password1', message='Passwords must match')])
 

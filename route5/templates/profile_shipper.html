@@ -33,7 +33,7 @@
 
           <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">User profile</h3>
+              <h3 class="panel-title">Shipper profile</h3>
             </div>
             <div class="panel-body">
               <div class="row">
@@ -50,28 +50,43 @@
                   <table class="table table-user-information">
                     <tbody>
                       <tr>
-                        <td>Username:</td>
+                        <td>Shipping Node Name:</td>
                         <td>{{ d.user.user_username }}</td>
                       </tr>
                       <tr>
-                        <td>Full name:</td>
+                        <td>Owner Full Name:</td>
                         <td>{{ d.user.user_name }} {{ d.user.user_lastname }}</td>
                       </tr>
                       <tr>
-                        <td>Email:</td>
+                        <td>Owner Email:</td>
                         <td>{{ d.user.user_email }}</td>
                       </tr>
                       <tr>
-                        <td>Phone number:</td>
+                        <td>Contact Phone Number:</td>
                         <td>{{ d.user.user_mobile }}</td>
                       </tr>
-                        <tr>
-                        <td>Code5</td>
+                      <tr>
+                        <td>Shipping Node code5:</td>
                         <td>{{ d.str_code5 }}</td>
+                      </tr>
+                      <tr>
+                        <td>Node Opening Status:</td>
+                        <td>Closed</td>
+                      </tr>
+                      <tr>
+                        <td>Node Rating Value:</td>
+                        <td>Not trusted</td>
+                      </tr>
+                      <tr>
+                        <td>Certification Status:</td>
+                        <td>Not certified</td>
+                      </tr>
+                      <tr>
+                        <td>Certification Date:</td>
+                        <td>-</td>
                       </tr>
                     </tbody>
                   </table>
-
                     <a data-toggle="modal" href="#editModal" data-original-title="Edit" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning pull-right"><i class="glyphicon glyphicon-edit"></i></a>
                 </div>
               </div>
@@ -140,7 +155,7 @@
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">{{ d.form.user_username.label }}</div>
+                            <div class="col-md-3">Company name:</div>
                             <div class="col-md-3">{{ d.user.user_username }}</div>
                             <div class="col-md-2"><a href="#change_password">Change&nbsp;password</a></div>
                         </div>
@@ -149,15 +164,15 @@
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">Email:</div>
-                            <div class="col-md-2">{{ d.user.user_email }}</div>
+                            <div class="col-md-3">Email:</div>
+                            <div class="col-md-3">{{ d.user.user_email }}</div>
                             <div class="col-md-2"><a href="#edit_email"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">Name:</div>
-                            <div class="col-md-2">{{ d.form.user_name(placeholder="First name") }}</div>
+                            <div class="col-md-3">Owner Full Nam:</div>
+                            <div class="col-md-3">{{ d.form.user_name(placeholder="First name") }}</div>
                             <div class="col-md-2">{{ d.form.user_lastname(placeholder="Last name") }}</div>
                         </div>
                         <div>
@@ -172,8 +187,8 @@
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">{{ d.form.user_mobile.label }}</div>
-                            <div class="col-md-2">{{ d.form.user_mobile(placeholder="+1 (111) 222-2222") }}</div>
+                            <div class="col-md-3">{{ d.form.user_mobile.label }}</div>
+                            <div class="col-md-3">{{ d.form.user_mobile(placeholder="+1 (111) 222-2222") }}</div>
                         </div>
                         <div>
                             {% if d.form.user_mobile.errors %}
@@ -187,8 +202,8 @@
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">{{ d.form.user_country.label }}</div>
-                            <div class="col-md-2">{{ d.form.user_country() }}</div>
+                            <div class="col-md-3">{{ d.form.user_country.label }}</div>
+                            <div class="col-md-3">{{ d.form.user_country() }}</div>
                         </div>
                         <div>
                             {% if d.form.user_country.errors %}
@@ -202,8 +217,8 @@
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">{{ d.form.user_language.label }}</div>
-                            <div class="col-md-2">{{ d.form.user_language() }}</div>
+                            <div class="col-md-3">{{ d.form.user_language.label }}</div>
+                            <div class="col-md-3">{{ d.form.user_language() }}</div>
                         </div>
                         <div>
                             {% if d.form.user_language.errors %}
@@ -217,7 +232,7 @@
 
                         <div class="row">
                             <div class="col-md-1"></div>
-                            <div class="col-md-2">Your code5:</div>
+                            <div class="col-md-3">Your code5:</div>
                             <div class="col-md-4">{{ d.str_code5 }}</div>
                             <div class="col-md-2"><a href="#manage_code5">See all&nbsp;<span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span></a></div>
                         </div>

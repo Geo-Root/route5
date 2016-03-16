@@ -5,16 +5,19 @@ Distributed Shipping and Address Generation Platform. Highly scalable design rep
 
 ### Users:
 
+```
 -- admin
 -- guest
 -- user
 -- shipper
 -- busines
+```
 
 ### Actions:
 
-- login
--- with email address or mobile number
+```
+- login (DONE)
+-- with email address or username (DONE)
 -- with code5
 
 - registration
@@ -23,6 +26,7 @@ Distributed Shipping and Address Generation Platform. Highly scalable design rep
 -- by code5
 - email verification
 - pass stroring
+```
 
 ### Signup
 

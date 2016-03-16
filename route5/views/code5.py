@@ -7,6 +7,9 @@
 
 import random
 from route5.models import db_code5
+from flask.ext.bcrypt import Bcrypt, generate_password_hash
+import hashlib
+
 
 def _is_free(code5):
     return True
@@ -60,3 +63,6 @@ def address_to_code5():
 
 def is_valid_promotion(promotion):
     return False
+
+def get_api_token(code5):
+    return hashlib.sha224(str(code5)).hexdigest()

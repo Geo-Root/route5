@@ -73,7 +73,10 @@ body {
     font-weight: bold;
 }
 
-
+.long_text {
+    word-wrap: break-word;
+    max-width: 170px;
+}
 
 
 .signup-path {

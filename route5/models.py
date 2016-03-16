@@ -60,8 +60,9 @@ def helper_signup(form, utype="user", update=False):
     """ Helper function for any user registration.
     """
     # user = User(form=form) # TODO: not dict fix it
-    key_field = form.user_username.data.lower()
+
     if not update:
+        key_field = form.user_username.data.lower()
         user = db_users.find_one({"_id": key_field})
         if user:
             form.user_username.errors.append("User exists")
@@ -86,6 +87,7 @@ def helper_signup(form, utype="user", update=False):
         db_code5.save(code5_obj)
 
     else:
+        key_field = session["user"]["user_username"].lower()
         user = db_users.find_one({"_id": key_field})
         if not user:
             return False, form, None
@@ -97,7 +99,6 @@ def helper_signup(form, utype="user", update=False):
     user['user_language'] = form.user_language.data
 
     db_users.save(user)
-
-
+    session["user"] = user
 
     return True, form, user
