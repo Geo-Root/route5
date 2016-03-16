@@ -7,17 +7,20 @@
 
 from flaskext.auth import permission_required
 from flask import render_template, url_for, redirect, g, Response, request, flash, session
-from route5 import auth
 from route5 import app, roles
 from route5.forms import *
-from route5.models import db_users
+from route5.models import db_users, helper_signup
 from route5.views.code5 import get_next_code5
 from flask.ext.bcrypt import Bcrypt, generate_password_hash
 import datetime
+from route5.views.helpers import get_context
 
 bcrypt = Bcrypt(app)
 
+
 def login():
+    """ Controller for log in user into Route5.
+    """
     d = get_context()
     form = LoginForm(request.form)
     d["login_form"] = form
@@ -41,63 +44,31 @@ def login():
             return render_template('signup.html', d=d)
         else:
             session["user"] = obj
+            session["code5"] = obj["user_code5"]
+            str_code5 = "".join(["0"*(3-len(x))+x for x in str(session["code5"])])
+            session["str_code5"] = "%s-%s-%s-%s-%s" % (str_code5[:3], str_code5[3:6], str_code5[6:9], str_code5[9:12], str_code5[12:16])
             flash("Welcome back %s" % obj["user_username"])
             return redirect(url_for("index"))
-    return render_template("signup.html", d=d)
-    
-    # callback=url_for('authorized', _external=True)
-    # return google.authorize(callback=callback)
+    return redirect(url_for("signup"))
 
 
 def logout():
+    """ Controller for log out user.
+    """
     session.clear()
-    flash("You can login back")
     return redirect(url_for("index"))
 
 
-def get_access_token():
-    return session.get('access_token')
-
-
-def helper_signup(form, utype="user"):
-
-    status = None
-    # user = User(form=form) # TODO: not dict fix it
-    user = {
-        'user_username': form.user_username.data,
-        'user_password1': form.user_password1.data, # TODO: now raw, fix it
-        'user_email': form.user_email.data,
-        'user_name': form.user_name.data,
-        'user_lastname': form.user_lastname.data,
-        'user_mobile': form.user_mobile.data,
-        'user_language': form.user_language.data,
-        'user_code5': session["code5"],
-        'user_promotion_code': form.user_promotion_code.data,
-        'user_registration_date': datetime.datetime.utcnow(),
-        'user_type': utype,
-    }
-    user["user_password"] = generate_password_hash(user["user_password1"], 12)
-    del user["user_password1"]
-
-    key_field = user['user_username'].lower()
-    obj = db_users.find_one({"_id":key_field})
-    if obj:
-        form.user_username.errors.append("User exists")
-        return False, form, None
-    user["_id"] = key_field
-    db_users.save(user)
-    return True, form, user
 
 def signup():
-    ''' Shipper signup page, currently generic.
-    '''
+    """ Controller for generic signup/login page.
+    """
+    d = get_context()
     if "user" in session:
         flash("Please logout")
         return redirect(url_for("index"))
-
-    d = get_context()
     d["focus"] = "login"
-    if not "code5" in session:
+    if "code5" not in session:
         code5, str_code5 = get_next_code5()
         session["code5"] = code5
         session["str_code5"] = str_code5
@@ -107,9 +78,10 @@ def signup():
     d["user_form"] = UserRegisterForm(request.form)
     return render_template('signup.html', d=d)
 
+
 def signup_user():
-    ''' User signup page, currently generic.
-    '''
+    """ Controller for user signup page.
+    """
     d = get_context()
     form = UserRegisterForm(request.form)
     d["user_form"] = form
@@ -126,13 +98,14 @@ def signup_user():
         flash('Thank you for registering')
         session["user"] = user
         return redirect(url_for("index"))
-    if not "user_code5" in d:
+    if "user_code5" not in d:
         code5, d["user_code5"] = get_next_code5()
     return render_template('signup.html', d=d)
 
+
 def signup_shipper():
-    ''' Shipper signup page, currently generic.
-    '''
+    """ Controller for shipper signup page.
+    """
     d = get_context()
     form = ShipperRegisterForm(request.form)
     d["shipper_form"] = form
@@ -149,40 +122,47 @@ def signup_shipper():
         flash('Thank you for registering')
         session["user"] = user
         return redirect(url_for("index"))
-    if not "user_code5" in d:
+    if "user_code5" not in d:
         code5, d["user_code5"] = get_next_code5()
     return render_template('signup.html', d=d)
 
+
 def signup_code5():
-    pass
+    raise NotImplemented
 
-### Context related controllers and helpers
 
-def get_context():
-    context = {}
-    if "user" in session:
-        context["user"] = session["user"]
-    return context
-
-### Main controllers
-# @permission_required(resource='all', action='view')
-def index():
-    ''' Index page.
-    '''
-    if not "user" in session:
-        return redirect(url_for("signup"))
+def signup_business():
+    """ Controller for business signup page.
+    """
     d = get_context()
-    return render_template('index.html', d=d)
+
+    form = BusinessRegisterForm(request.form)
+    d["shipper_form"] = ShipperRegisterForm()
+    d["focus"] = "business"
+
+    d["business_form"] = form
+    d["user_form"] = UserRegisterForm()
+
+    if request.method == "POST" and form.validate():
+        status, form, user = helper_signup(form, utype="business")
+        if not status:
+            d["from"] = form
+            return render_template('signup_business.html', d=d)
+        flash('Thank you for registering')
+        session["user"] = user
+        return redirect(url_for("index"))
+    if "user_code5" not in d:
+        code5, d["user_code5"] = get_next_code5()
+    return render_template('signup_business.html', d=d)
 
 
-app.add_url_rule('/', 'index', index, methods=['GET'])
 app.add_url_rule('/signup', 'signup', signup, methods=['GET'])
 app.add_url_rule('/user-signup', 'signup_user', signup_user, methods=['POST'])
 app.add_url_rule('/code5-signup', 'signup_code5', signup_code5, methods=['POST'])
 app.add_url_rule('/shipper-signup', 'signup_shipper', signup_shipper, methods=['POST'])
+app.add_url_rule('/business', 'signup_business', signup_business, methods=['GET', 'POST'])
 app.add_url_rule('/login', 'login', login, methods=['POST'])
 app.add_url_rule('/logout', 'logout', logout, methods=['GET', 'POST'])
-app.add_url_rule('/index', 'index', index, methods=['GET'])
 
 
 
