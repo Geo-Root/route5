@@ -4,16 +4,19 @@
 #@created: 03.03.2016
 #@author: Alex Ferechin
 #@contact: alex.ferechin@gmail.com
-'''
+"""
 Flask application initiation.
-'''
+"""
 
 import os
-from flask import Flask
+from flask import Flask, session
 from settings import *
 from flask.ext.basicauth import BasicAuth
 from flaskext.auth import Auth, AuthUser, Permission, Role, permission_required
 from flask_oauth import OAuth
+
+
+
 
 app = Flask('route5')
 app.config.from_object('route5.settings')
@@ -40,6 +43,7 @@ roles = {
     'business': Role('userview', [all_view]),
 }
 
+
 def load_role(role_name):
     return roles.get(role_name)
 
@@ -58,6 +62,17 @@ auth.load_role = load_role
 #                           consumer_key=GOOGLE_CLIENT_ID,
 #                           consumer_secret=GOOGLE_CLIENT_SECRET)
 
+
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static', 'uploads')
+if not os.path.isdir(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+
 import views.code5
 import views.login
+import views.dashboard
+import views.profile
 import filters
