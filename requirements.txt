@@ -1,8 +1,10 @@
 # Development environment pip requirements file
 # Install via 'pip install -r requirements_dev.txt'
 
+flask
 yaml
 pymongo
 jinja2
 simplejson
 wtforms
+flask-uploads
