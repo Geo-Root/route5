@@ -113,7 +113,7 @@ def business_profile():
     return render_template(template_name, d=d)
 
 app.add_url_rule('/profile', 'user_profile', user_profile, methods=['GET'])
-app.add_url_rule('/profile', 'user_profile', shipper_profile, methods=['GET'])
+app.add_url_rule('/profile', 'shipper_profile', shipper_profile, methods=['GET'])
 app.add_url_rule('/profile', 'business_profile', business_profile, methods=['GET'])
 app.add_url_rule('/rpc/save/user_profile', 'save_user_profile', save_user_profile, methods=['POST'])
 app.add_url_rule('/upload/profile', 'upload_profile_photo', upload_profile_photo, methods=['GET', 'POST'])
