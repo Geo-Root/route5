@@ -34,14 +34,12 @@
                 <li class="navbar-left" {% if request.path == '/profile' %}class="active"{% endif %}><a href="/profile">Profile</a></li>
                 <li class="navbar-left" {% if request.path == '/dashboard' %}class="active"{% endif %}><a href="/dashboard">Dashboard</a></li>
 
-                {% if d.user.role == "admin" %}
+                {% if d.admin %}
               <li class="dropdown navbar-left" {% if request.path == '/tools' %}class="active"{% endif %}>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administration <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">option1</a></li>
-
-                    <li><a href="#">Admin option1</a></li>
-
+                  <li><a href="/root/users">Manage users</a></li>
+                  <li><a href="/root/certification">Certification</a></li>
                 </ul>
               </li>
                     {% endif %}

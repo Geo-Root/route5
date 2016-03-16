@@ -75,4 +75,5 @@ import views.code5
 import views.login
 import views.dashboard
 import views.profile
+import views.admin
 import filters
