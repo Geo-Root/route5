@@ -77,7 +77,7 @@ def helper_signup(form, utype="user", update=False):
         password = form.user_password1.data
         user["user_password"] = generate_password_hash(password, 12)
 
-        code5_obj = db_code5.find_one({"_id": user["code5"]})
+        code5_obj = db_code5.find_one({"_id": user["user_code5"]})
         if not code5_obj:
             ### get other code5
             pass
