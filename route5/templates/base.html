@@ -31,18 +31,20 @@
           <ul class="nav navbar-nav">
           <li class="navbar-left"><a href="/">Route5</a></li>
             {% if d.user %}
-                <li class="navbar-left" {% if request.path == '/send' %}class="active"{% endif %}><a href="/send">Send</a></li>
-                <li class="navbar-left" {% if request.path == '/ship' %}class="active"{% endif %}><a href="/ship">Ship</a></li>
+                <li class="navbar-left" {% if request.path == '/profile' %}class="active"{% endif %}><a href="/profile">Profile</a></li>
+                <li class="navbar-left" {% if request.path == '/dashboard' %}class="active"{% endif %}><a href="/dashboard">Dashboard</a></li>
 
+                {% if d.user.role == "admin" %}
               <li class="dropdown navbar-left" {% if request.path == '/tools' %}class="active"{% endif %}>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                   <li><a href="#">option1</a></li>
-                  {% if d.user.role == "admin" %}
+
                     <li><a href="#">Admin option1</a></li>
-                  {% endif %}
+
                 </ul>
               </li>
+                    {% endif %}
             {% endif %}
             <li class="navbar-right">{% if d.user %}<a href="/logout">Logout ( <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{d.user.user_username}})</a>{% else %}<a href="/login">Login</a>{% endif %}</li>
             
@@ -76,6 +78,11 @@
       <!-- Latest compiled and minified JavaScript -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.3/holder.js"></script>
+
+
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
     {% endblock %}
     {% block jsscript %}
     {% endblock %}

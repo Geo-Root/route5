@@ -96,7 +96,7 @@
                 </form>
             </div>
 
-
+            <!-- Login tab -->
 
             <div class="tab-pane fade in {%if d.focus == 'login'%}active{%endif%}" id="user">
               <br>
@@ -137,6 +137,10 @@
                   <div class=" text-center">
                     {{ d.login_form.csrf_token }}
                     <button class="btn btn-primary" type="submit">LOGIN</button>
+                  </div>
+                  <div class=" text-center">
+                      <br/>
+                    <p><a href="{{ url_for('signup_business') }}">Sign up as Business</a></p>
                   </div>
               </form>  
             </div>
@@ -253,8 +257,12 @@
                     {{ d.user_form.csrf_token }}
                     <button class="btn btn-primary btn-lg btn-block" type="submit">Sign Up</button>
                   </div>
+
                 </form>
+
             </div>
+
+
 
 
 

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block jsscript %}
+    <script type="application/javascript">
+        $(document).ready(function(){
+
+            refresh_profile_image();
+        });
+
+        function refresh_profile_image() {
+            $.getJSON("/rpc/me/image", function(data) {
+                var d = new Date();
+                $("#user_pic").attr("src", data.responseText+"?"+d.getTime());
+                $("#user_pic_form").attr("src", data.responseText+"?"+d.getTime());
+            });
+        }
+
+    </script>
+{% endblock %}
+
+{% block main %}
+
+<div class="row dashboard">
+  <div class="col-sm-4">
+    <div align="center">
+        {% if d.user.profile_image %}
+            <img id="user_pic" alt="User Pic" src="{{ d.user.profile_image }}" class="img-circle img-responsive">
+        {% else %}
+            <img id="user_pic" alt="User Pic" src="http://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user-150x150.png" class="img-circle img-responsive">
+        {% endif %}
+        <span>{{ d.user.user_username }}</span>
+
+    </div>
+    <div>
+        <span>Your profile: 70%</span>
+    </div>
+    <div
+        <p></p><span>Verify Email</span></p>
+        <p><span>Verify Mobile</span></p>
+        <p><span>Add Credit Card</span></p>
+    </div>
+    <div>
+        <h3><span>New address</span></h3>
+        <h3><span>New shipment</span></h3>
+    </div>
+  </div>
+  <div class="col-sm-4">
+      <h2>My shipments</h2>
+  </div>
+</div>
+
+{% endblock %}
