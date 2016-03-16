@@ -24,6 +24,13 @@ body {
   margin: 0 auto;
 }
 
+.profile {
+    margin-top: 75px;
+}
+
+.dashboard {
+    margin-top: 75px;
+}
 
 
 .sign-in-up .left-inner-addon {
