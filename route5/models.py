@@ -15,6 +15,9 @@ import datetime
 
 db_users = Connection("localhost", 27017)["Route5"]["Users"]
 db_code5 = Connection("localhost", 27017)["Route5"]["Code5"]
+db_contacts = Connection("localhost", 27017)["Route5"]["Contacts"]
+db_messages = Connection("localhost", 27017)["Route5"]["Messages"]
+db_orders = Connection("localhost", 27017)["Route5"]["Orders"]
 
 
 class Code5(AbstractModel):

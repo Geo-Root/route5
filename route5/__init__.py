@@ -76,4 +76,5 @@ import views.login
 import views.dashboard
 import views.profile
 import views.admin
+import views.order
 import filters

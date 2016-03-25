@@ -8,7 +8,7 @@
 from flask.ext import wtf
 from flask.ext.wtf import Form
 import wtforms
-from wtforms.fields import TextField, BooleanField, PasswordField, TextAreaField, SelectField, HiddenField
+from wtforms.fields import TextField, BooleanField, PasswordField, TextAreaField, SelectField, HiddenField, FloatField, IntegerField
 from wtforms import validators
 
 GEO = {
@@ -248,7 +248,7 @@ class UserForm(Form):
 class RegisterForm(UserForm):
 
     user_email = TextField(label="Email", validators=[validators.Required(), wtforms.validators.Email()])
-    user_username = TextField(label="Username", validators=[validators.Required(), validators.Length(min=4, max=25)])
+    user_username = TextField(label="Username", validators=[validators.Regexp(r'^[\w]+$'), validators.Required(), validators.Length(min=4, max=25)])
     user_password1 = PasswordField(label="Password", validators=[validators.Required(), validators.Length(min=3)])
     user_password2 = PasswordField(label="Repeat password", validators=[validators.Required(),  validators.EqualTo('user_password1', message='Passwords must match')])
 
@@ -271,6 +271,7 @@ class ShipperRegisterForm(RegisterForm):
 class BusinessRegisterForm(RegisterForm):
     pass
 
+
 class AdminRegisterForm(RegisterForm):
     pass
 
@@ -278,3 +279,13 @@ class AdminRegisterForm(RegisterForm):
 class PromotionCodeForm(Form):
 
     promotion_code = None
+
+
+class ShipmentForm(Form):
+
+    sh_user = TextField(label="Username", validators=[validators.Regexp(r'^[\w]+$'), validators.Required(), validators.Length(min=4, max=25)])
+    sh_weight = FloatField(label="Weight")
+    sh_status = TextField()
+    sh_code5 = IntegerField()
+    sh_tracking_number = IntegerField()
+
