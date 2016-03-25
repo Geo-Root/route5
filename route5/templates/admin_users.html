@@ -21,7 +21,7 @@
         </thead>
         {% for user in d.users %}
             <tr>
-                <td>{{ user.user_username }}</td>
+                <td><a href="/user/{{ user.user_username }}">{{ user.user_username }}</a></td>
                 <td>{{ user.user_type }}</td>
                 <td></td>
                 <td>{{ user.user_code5 }}</td>

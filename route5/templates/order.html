@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block jsscript %}
+    <script type="application/javascript">
+        $(document).ready(function () {
+
+        });
+
+    </script>
+{% endblock %}
+
+{% block main %}
+
+
+    <form action="index.html" method="post" id="order-form" class="ng-valid ng-dirty ng-valid-parse">
+
+        <div class="row orderform">
+            <div class="col-sm-6 col-md-6">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Weight</th>
+                        <th class="text-center">
+                            <span class="hidden-xs">Height</span>
+                            <span class="visible-xs">H</span>
+                        </th>
+                        <th class="text-center">
+                            <span class="hidden-xs">Width</span>
+                            <span class="visible-xs">W</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="vert-align">Item1</td>
+                        <td class="vert-align ng-binding">
+                            <input type="text" placeholder="Item weight (kg)"/>
+                        </td>
+                        <td class="text-center">
+                            <input type="text" placeholder="Item height (cm)"/>
+                        </td>
+                        <td class="text-right vert-align ng-binding">
+                            <input type="text" placeholder="Item width (cm)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><a href="#add">Add item</a>&nbsp;|&nbsp;<a href="#add">Remove item</a></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-6 col-md-6">
+                <p class="text-center"><strong>Pickup address</strong></p>
+                <div class="form-group">
+                    <label class="control-label">Street</label>
+                    <input name="street" placeholder="Street address" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">City</label>
+                    <input name="city" placeholder="City" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Country</label>
+                    <input name="Country" placeholder="Country" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Postcode or Code5</label>
+                    <input name="postcode" placeholder="Post code" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-6 col-md-6">
+                <p class="text-center"><strong>Delivery address</strong></p>
+                <div class="form-group">
+                    <label class="control-label">Street</label>
+                    <input name="street" placeholder="Street address" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">City</label>
+                    <input name="city" placeholder="City" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Country</label>
+                    <input name="Country" placeholder="Country" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Postcode or Code5</label>
+                    <input name="postcode" placeholder="Post code" class="form-control" type="text">
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th colspan="3" class="text-center">Order sumary</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Estimated Shipping Cost:</td>
+                        <td></td>
+                        <td class="text-right">$80.00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6 contact-info">
+                <p class="text-center"><strong>Payment Method</strong></p>
+                <div class="row">
+                    <div class="col-sm-8 col-md-8">
+                        <div class="form-group">
+                            <label class="control-label">Name</label>
+                            <input name="Card number" placeholder="Card number" class="form-control input-lg" type="text">
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Code</label>
+                            <input name="Code" placeholder="Code" class="form-control input-lg" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" for="contact-mail">month</label>
+                            <div class=" controls">
+                                <select class="form-control">
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" for="contact-mail">year</label>
+                            <div class=" controls">
+                                <select class="form-control">
+                                    <option value="2016">2016</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2018">2019</option>
+                                    <option value="2018">2020</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center"><strong>Information</strong></p>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Name</label>
+                            <input name="First name" placeholder="First name" class="form-control input-lg" type="text">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Last Name</label>
+                            <input name="Last name" placeholder="Last name" class="form-control input-lg" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Email</label>
+                    <input name="email" placeholder="Your email" class="form-control input-lg" type="email">
+                </div>
+                <p class="text-center"><strong>If you have Coupon code</strong></p>
+                <div class="input-group ">
+                    <input placeholder="Coupon code" class="form-control input-lg" type="text">
+            <span class="input-group-btn">
+                <button name="submit" type="submit" class="btn btn-store">Check!</button>
+            </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row orderform">
+            <div class="col-sm-6 col-md-6 contact-info">
+                <p>
+                    <button name="submit" type="submit" class="btn btn-store btn-block">Order Product</button>
+                </p>
+                <input type="hidden" name="submitted" id="submitted" value="true">
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}

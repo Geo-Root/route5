@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block jsscript %}
+    <script type="application/javascript">
+
+        $(document).ready(function(){
+            $('.panel-body').scrollTop( $('ul li').last().position().top + $('ul li').last().height() );
+            $("#btn-refresh").click(function(){
+                window.location = window.location.href.split("#")[0];
+            });
+        });
+
+        function refresh_profile_image() {
+            $.getJSON("/rpc/me/image", function(data) {
+                var d = new Date();
+                $("#user_pic").attr("src", data.responseText+"?"+d.getTime());
+                $("#user_pic_form").attr("src", data.responseText+"?"+d.getTime());
+            });
+        }
+
+    </script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="row messages">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title">Messages with {{ d.profile.user_username }} ({{ d.profile.user_type.capitalize() }})</p>
+                </div>
+                <div class="panel-body panel-body-chat">
+                    <ul class="chat">
+                        {% for m in d.messages %}
+                            {% if m.a == d.user.user_username.lower() %}
+                                <li class="left clearfix {% if loop.last %}lastchat{% endif %}" {% if loop.last %}tabindex="1"{% endif %}><span class="chat-img pull-left">
+                                    {% if d.user.user_image %}
+                                        <img src="/static/uploads/{{ d.user.user_image }}" width="50" height="50" alt="User Avatar" class="img-circle">
+                                    {% else %}
+                                        <img src="http://placehold.it/50/55C122/fff&amp;text={{ d.user.user_username[0] }}" alt="User Avatar" class="img-circle">
+                                    {% endif %}
+                                </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">{{ d.user.user_name }}</strong> <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span>{{ m.minutes }} mins ago</small>
+                                        </div>
+                                            <p>
+                                                {{ m.message }}
+                                            </p>
+
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="right clearfix {% if loop.last %}lastchat{% endif %}" {% if loop.last %}tabindex="1"{% endif %}><span class="chat-img pull-right">
+                                    {% if d.profile.user_image %}
+                                        <img src="/static/uploads/{{ d.profile.user_image }}" width="50" height="50" alt="User Avatar" class="img-circle">
+                                    {% else %}
+                                        <img src="http://placehold.it/50/55C1E7/fff&amp;text={{ d.profile.user_username[0] }}" alt="User Avatar" class="img-circle">
+                                    {% endif %}
+                                </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>{{ m.minutes }} mins ago</small>
+                                            <strong class="pull-right primary-font">{{ d.profile.user_name }}</strong>
+                                        </div>
+                                            <p>
+                                                {{ m.message }}
+                                            </p>
+
+                                    </div>
+                                </li>
+                            {% endif %}
+
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <form action="/messages/{{ d.profile.user_username }}" method="post" accept-charset="utf-8">
+                            <input name="message" id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here...">
+                            <button class="btn btn-warning btn-sm messsage_button" id="btn-chat" type="submit">Send</button>
+                            <a class="btn btn-warning btn-sm messsage_button" id="btn-refresh"><span class="glyphicon glyphicon-refresh"></a>
+                            <a class="btn btn-warning btn-sm" href="{{ url_for("index") }}"><span class="glyphicon glyphicon-home"></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

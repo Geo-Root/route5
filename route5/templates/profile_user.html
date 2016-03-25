@@ -47,30 +47,30 @@
                     <span>Your profile: 70%</span>
                 </div>
                 <div class=" col-md-9 col-lg-9 ">
-                  <table class="table table-user-information">
-                    <tbody>
-                      <tr>
-                        <td>Username:</td>
-                        <td>{{ d.user.user_username }}</td>
-                      </tr>
-                      <tr>
-                        <td>Full name:</td>
-                        <td>{{ d.user.user_name }} {{ d.user.user_lastname }}</td>
-                      </tr>
-                      <tr>
-                        <td>Email:</td>
-                        <td>{{ d.user.user_email }}</td>
-                      </tr>
-                      <tr>
-                        <td>Phone number:</td>
-                        <td>{{ d.user.user_mobile }}</td>
-                      </tr>
-                        <tr>
-                        <td>Code5</td>
-                        <td>{{ d.str_code5 }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                    <table class="table table-user-information">
+                        <tbody>
+                          <tr>
+                            <td>Username:</td>
+                            <td>{{ d.user.user_username }}</td>
+                          </tr>
+                          <tr>
+                            <td>Full name:</td>
+                            <td>{{ d.user.user_name }} {{ d.user.user_lastname }}</td>
+                          </tr>
+                          <tr>
+                            <td>Email:</td>
+                            <td>{{ d.user.user_email }}</td>
+                          </tr>
+                          <tr>
+                            <td>Phone number:</td>
+                            <td>{{ d.user.user_mobile }}</td>
+                          </tr>
+                            <tr>
+                            <td>Code5</td>
+                            <td>{{ d.str_code5 }}</td>
+                          </tr>
+                        </tbody>
+                    </table>
                     <a data-toggle="modal" href="{{ url_for('dashboard') }}" data-original-title="Dashboard" data-toggle="tooltip" type="button" class="btn btn-sm pull-right btn-info profile-button"><i class="glyphicon glyphicon-home"></i></a>
                     <a data-toggle="modal" href="#editModal" data-original-title="Edit" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning pull-right profile-button"><i class="glyphicon glyphicon-edit"></i></a>
                 </div>

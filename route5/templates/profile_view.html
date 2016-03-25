@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block jsscript %}
+    <script type="application/javascript">
+        $(document).ready(function(){
+
+        });
+
+        function refresh_profile_image() {
+            $.getJSON("/rpc/me/image", function(data) {
+            });
+        }
+
+    </script>
+{% endblock %}
+
+
+{% block main %}
+
+<div class="row profile">
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">User profile</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3 col-lg-3 " align="center">
+                    {% if d.user.profile_image %}
+                        <img id="user_pic" alt="User Pic" src="{{ d.user.profile_image }}" class="img-circle img-responsive">
+                    {% else %}
+                        <img id="user_pic" alt="User Pic" src="http://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user-150x150.png" class="img-circle img-responsive">
+                    {% endif %}
+                    <span id="change_image" hidden><a data-toggle="modal" href="#imageModal">Click to change</a></span>
+                    <span><a href="/messages/{{ d.profile.user_username.lower() }}">Send message</a></span>
+                    {% if d.incontacts == True %}
+                        <span>In contacts</span>
+                        <span><a href="/rpc/contacts/del/{{ d.profile.user_username.lower() }}">Remove</a></span>
+                    {% else %}
+                        <span><a href="/rpc/contacts/add/{{ d.profile.user_username.lower() }}">Add to contacts</a></span>
+                    {% endif %}
+                </div>
+                <div class=" col-md-9 col-lg-9 ">
+                    <table class="table table-user-information">
+                        <tbody>
+                          <tr>
+                            <td>Account type:</td>
+                            <td>{{ d.profile.user_type.capitalize() }}</td>
+                          </tr>
+                          <tr>
+                            <td>Username:</td>
+                            <td>{{ d.profile.user_username }}</td>
+                          </tr>
+                          <tr>
+                            <td>Full name:</td>
+                            <td>{{ d.profile.user_name }} {{ d.profile.user_lastname }}</td>
+                          </tr>
+                          <tr>
+                            <td>Email:</td>
+                            <td>{{ d.profile.user_email }}</td>
+                          </tr>
+                          <tr>
+                            <td>Phone number:</td>
+                            <td>{{ d.profile.user_mobile }}</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <a data-toggle="modal" href="{{ url_for('dashboard') }}" data-original-title="Dashboard" data-toggle="tooltip" type="button" class="btn btn-sm pull-right btn-info profile-button"><i class="glyphicon glyphicon-home"></i></a>
+
+                    {% if d.incontacts == True %}
+                        <a data-toggle="modal" href="/rpc/contacts/add/{{ d.profile.user_username.lower() }}" data-original-title="Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger pull-right profile-button"><i class="glyphicon glyphicon-remove"></i></a>
+                    {% else %}
+                        <a data-toggle="modal" href="/rpc/contacts/del/{{ d.profile.user_username.lower() }}" data-original-title="Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-success pull-right profile-button"><i class="glyphicon glyphicon-plus"></i></a>
+                    {% endif %}
+
+
+                    <a data-toggle="modal" href="/messages/{{ d.profile.user_username.lower() }}" data-original-title="Message" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning pull-right profile-button"><i class="glyphicon glyphicon-envelope"></i></a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+
+{% endblock %}
