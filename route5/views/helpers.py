@@ -12,6 +12,13 @@ from route5.settings import ROOT_USER
 ### Context related helpers
 from route5.models import db_users
 from route5.views.code5 import get_str_code5, get_api_token
+from flask import request, url_for
+
+
+def redirect_url(default='index'):
+    return request.args.get('next') or \
+           request.referrer or \
+           url_for(default)
 
 
 def get_context():
