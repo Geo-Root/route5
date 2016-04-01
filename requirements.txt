@@ -1,5 +1,6 @@
 # Development environment pip requirements file
 # Install via 'pip install -r requirements_dev.txt'
+# sudo apt-get install libffi-dev
 
 flask
 yaml
@@ -8,3 +9,6 @@ jinja2
 simplejson
 wtforms
 flask-uploads
+flask-auth
+flask-oauth
+flask=bcrypt
