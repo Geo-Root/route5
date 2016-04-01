@@ -31,6 +31,22 @@ body {
     margin-top: 75px;
 }
 
+.address {
+    margin-top: 75px;
+}
+
+.red {
+  color: red;
+}
+.green {
+  color: green;
+}
+
+#address-route5 {
+  margin: 0 auto;
+  text-align: center;
+}
+
 .messages, .contacts, .orderform {
     margin-top: 75px;
 }
