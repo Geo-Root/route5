@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block jsscript %}
+
+	
+	<script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
+	<script src="/static/js/locationpicker.jquery.js"></script>
+    <script src="/static/js/map.js"></script>
+
+{% endblock %}
+
+{% block main %}
+
+
+    <div class="row address">
+        <h2>My addresses</h2>
+        <table class="table table-striped table-bordered table-condensed table-hover">
+           <thead>
+            <tr>
+                <th></th>
+                <th>Type</th>
+                <th>Address</th>
+                <th>Code5</th>
+                <th></th>
+                <th></th>
+            </tr>
+          </thead>
+
+          {% for A in d.places %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ A.type }}</td>
+                <td>{{ A.address }}</td>
+                <td>{{ A.str_code5 }}</td>
+                <th><a href="#edit?{{A.code5}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></th>
+                <th><a href="/rpc/place/delete/{{A.code5}}"><span class="error red">X</span></a></th>
+              </tr>
+          {% endfor %}
+          <tr>
+            <td></td>
+            <td></td>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th><a data-toggle="modal" href="#us6-dialog"><span class="error green">Add</span></a></th>
+          </tr>
+        </table>
+
+        <form action="/places" method="POST" id="address-form">
+        <div id="us6-dialog" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add a new address</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal" style="width: 550px">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Location:</label>
+
+                                <div class="col-sm-10"><input type="text" class="form-control" id="us6-address" name="user_address"/></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Radius:</label>
+
+                                <div class="col-sm-5"><input type="text" class="form-control" id="us6-radius" name="radius"/></div>
+                            </div>
+                            <div id="us6" style="width: 100%; height: 400px;"></div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="m-t-small">
+                                <label class="p-r-small col-sm-1 control-label">Lat.:</label>
+
+                                <div class="col-sm-3"><input type="text" class="form-control" style="width: 110px"
+                                                             id="us6-lat" name="lat" /></div>
+                                <label class="p-r-small col-sm-2 control-label">Long.:</label>
+
+                                <div class="col-sm-3"><input type="text" class="form-control" style="width: 110px"
+                                                             id="us6-lon" name="lon"/></div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div id="address-route5" class="" style="width: 100%;" name="code5"><h2>{{ d.str_code5 }}</h2></div>
+                            <div class="clearfix">&nbsp;</div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="form-street1" name="street1" value="">
+                    <input type="hidden" id="form-street2" name="street2" value="">
+                    <input type="hidden" id="form-city" name="city" value="">
+                    <input type="hidden" id="form-state" name="state" value="">
+                    <input type="hidden" id="form-zip" name="zip" value="">
+                    <input type="hidden" id="form-country" name="country" value="">
+                    <input type="hidden" id="form-type" name="type" value="home">
+                    <input type="hidden" id="form-code5" name="code5" value="{{ d.code5 }}">
+                    <input type="hidden" id="form-str-code5" name="str_code5" value="{{ d.str_code5 }}">
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add address</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    </form>
+
+{% endblock %}
